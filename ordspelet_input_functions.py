@@ -1,4 +1,4 @@
-import game_explaination as game_exp
+import ordspelet_game_explaination as game_exp
 
 
 def player_input(the_answer):

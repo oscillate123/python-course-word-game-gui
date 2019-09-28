@@ -1,6 +1,6 @@
 import random
-import parse_user_guess as pug
-import input_functions as input_funcs
+import ordspelet_parse_user_guess as pug
+import ordspelet_input_functions as input_funcs
 
 
 def find_related_words(word_list, robot_guess, hints):
