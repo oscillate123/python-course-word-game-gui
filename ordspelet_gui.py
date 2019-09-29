@@ -3,19 +3,23 @@ import random
 import ordspelet_file_handler as ofh
 import ordspelet_game_funtions as ogf
 
+
 # source: http://appjar.info/*
 
 
 class OrdspelGUI:
 
-    def __init__(self, random_word):
-        self.random_word = random_word
+    def __init__(self, word_list=None):
+        # word_list=None, so we can use it if we have another words.txt file!
+        # Otherwise, we will work with the one we have
+
         self.app = gui()
+        self.word_list = word_list or ofh.file_reader("words.txt", encoding="ISO-8859-1")
+        self.random_word = ogf.random_list_element(word_list=self.word_list)
 
     def go_gui(self):
 
         # CLASS / METHOD / FUNCTION - AREA
-        random_word = self.random_word
         app = self.app
 
         # BODY SETTINGS
@@ -86,7 +90,17 @@ class OrdspelGUI:
                 app.guess_counter += 1
                 # USES Y GROUP 3
                 app.setLabel(f"2_L1", f"Guesses: {app.guess_counter}")
-                app.setTextArea("1_L1", end=True, text=f"\n{app.guess_counter} - {random_word}")
+
+                leader_return = ogf.leader_gui(self.word_list,
+                                               robot_guess=self.random_word,
+                                               clue=f"{app.getEntry('clue')}")
+                self.random_word = leader_return[0]
+                self.word_list = leader_return[1]
+
+                if len(self.word_list) == 0:
+                    app.okBox(title="OK_BOX", message="Programmet har slut på ord, i sin lista.")
+
+                app.setTextArea("1_L1", end=True, text=f"\n{app.guess_counter} - {self.random_word}")
 
         # Y GROUP 0
         app.addEmptyLabel("0_EL0", column=y_group0, row=x_group0)
@@ -100,7 +114,7 @@ class OrdspelGUI:
         app.addScrolledTextArea("1_L1", column=y_group1, row=x_group1)
         app.setTextArea("1_L1", text=f"{app.guess_counter} - {self.random_word}")
 
-        app.addNumericEntry("clue", column=y_group1, row=x_group2)
+        app.addEntry("clue", column=y_group1, row=x_group2)
         app.addButton("SUBMIT", press, column=y_group1, row=x_group3)
 
         # Y GROUP 2
@@ -129,14 +143,13 @@ class OrdspelGUI:
 
 
 if __name__ == "__main__":
-
     file_content = ofh.file_reader(read_file="words.txt", encoding='ISO-8859-1')  # returns list
     generated_word = ogf.random_list_element(word_list=file_content)
 
 
     def lets_try_this_shhh():
         print("activated")
-        x = OrdspelGUI(generated_word)
+        x = OrdspelGUI()
         x.go_gui()
 
 

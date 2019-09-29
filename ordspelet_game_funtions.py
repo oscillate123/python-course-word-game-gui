@@ -3,7 +3,7 @@ import ordspelet_parse_user_guess as pug
 import ordspelet_input_functions as input_funcs
 
 
-def find_related_words(word_list, robot_guess, hints):
+def find_related_words(word_list, robot_guess, clue):
     results = []
 
     for word in word_list:
@@ -12,7 +12,7 @@ def find_related_words(word_list, robot_guess, hints):
             if letter in robot_guess:
                 counter += 1
 
-        if counter >= hints:
+        if counter >= clue:
             results.append(word)
 
     return results
@@ -38,13 +38,27 @@ def leader(words_list):
     while flag:
         counter_1 += 1
         r_word = random_list_element(word_list)
-        new_list = find_related_words(word_list=word_list, robot_guess=r_word, hints=input_funcs.leader_input(r_word))
+        new_list = find_related_words(word_list=word_list, robot_guess=r_word, clue=input_funcs.leader_input(r_word))
         word_list = new_list
         new_list.remove(r_word)
 
         if len(new_list) == 0:
             print(f"Programmet ger upp.\n Programmet gissade {counter_1} gånger.")
             flag = False
+
+
+def leader_gui(words_list, robot_guess, clue):
+    # game mode where program is guessing, and where user is giving clues
+
+    word_list = words_list
+    print(len(word_list))
+    word_list.remove(robot_guess)
+
+    r_word = random_list_element(word_list)
+    new_list = find_related_words(word_list=words_list, robot_guess=robot_guess,
+                                  clue=int(clue))
+
+    return [r_word, new_list]
 
 
 def player(words_list):
