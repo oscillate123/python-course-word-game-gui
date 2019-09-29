@@ -6,8 +6,7 @@ import ordspelet_game_funtions as ogf
 # source: http://appjar.info/*
 
 
-class ordspel_gui:
-
+class OrdspelGUI:
 
     def __init__(self, random_word):
         self.random_word = random_word
@@ -136,8 +135,8 @@ if __name__ == "__main__":
 
 
     def lets_try_this_shhh():
-        print("mehe")
-        x = ordspel_gui(generated_word)
+        print("activated")
+        x = OrdspelGUI(generated_word)
         x.go_gui()
 
 
