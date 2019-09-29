@@ -25,6 +25,7 @@ class OrdspelGUI:
         # BODY SETTINGS
         app.setSize(300, 400)
         app.setLocation(0, 200)
+        app.setTitle("Ordspelet")
 
         # Y COORDINATE GROUPS (used for mass controlling column groups)
         y_group0 = 0
@@ -91,16 +92,16 @@ class OrdspelGUI:
                 # USES Y GROUP 3
                 app.setLabel(f"2_L1", f"Guesses: {app.guess_counter}")
 
-                leader_return = ogf.leader_gui(self.word_list,
-                                               robot_guess=self.random_word,
-                                               clue=f"{app.getEntry('clue')}")
-                self.random_word = leader_return[0]
-                self.word_list = leader_return[1]
+                if len(self.word_list) > 1:
+                    leader_return = ogf.leader_gui(self.word_list,
+                                                   robot_guess=self.random_word,
+                                                   clue=f"{app.getEntry('clue')}")
+                    self.random_word = leader_return[0]
+                    self.word_list = leader_return[1]
 
-                if len(self.word_list) == 0:
-                    app.okBox(title="OK_BOX", message="Programmet har slut på ord, i sin lista.")
-
-                app.setTextArea("1_L1", end=True, text=f"\n{app.guess_counter} - {self.random_word}")
+                    app.setTextArea("1_L1", end=True, text=f"\n{app.guess_counter} - {self.random_word}")
+                else:
+                    app.okBox(title="", message="Programmet har slut på ord i sin lista.")
 
         # Y GROUP 0
         app.addEmptyLabel("0_EL0", column=y_group0, row=x_group0)

@@ -51,12 +51,15 @@ def leader_gui(words_list, robot_guess, clue):
     # game mode where program is guessing, and where user is giving clues
 
     word_list = words_list
-    print(len(word_list))
+    print(word_list)
     word_list.remove(robot_guess)
 
-    r_word = random_list_element(word_list)
     new_list = find_related_words(word_list=words_list, robot_guess=robot_guess,
                                   clue=int(clue))
+
+    r_word = random_list_element(new_list)
+
+    print(r_word)
 
     return [r_word, new_list]
 
