@@ -23,7 +23,7 @@ class OrdspelGUI:
         app = self.app
 
         # BODY SETTINGS
-        app.setSize(300, 400)
+        app.setSize(350, 400)
         app.setLocation(0, 200)
         app.setTitle("Ordspelet")
 
@@ -52,7 +52,7 @@ class OrdspelGUI:
 
         app.addLabel("ti_pro_usr", f"saker med grejer", column=0, row=0)
         app.addEmptyLabel("empty_1_0", column=1, row=0)
-        app.addAutoEntry("auto_entry", words=file_content, column=0, row=2)
+        app.addAutoEntry("auto_entry", words=self.word_list, column=0, row=2)
         app.setAutoEntryNumRows("auto_entry", 3)
 
         app.stopTab()
@@ -87,40 +87,54 @@ class OrdspelGUI:
 
         # TAB FUNCTIONS
         def press(value):
-            if value == "SUBMIT":
-                app.guess_counter += 1
-                # USES Y GROUP 3
-                app.setLabel(f"2_L1", f"Guesses: {app.guess_counter}")
+            if value == "Submit":
+                if app.getEntry('clue').isnumeric():
+                    app.guess_counter += 1
+                    # USES Y GROUP 2
+                    app.setLabel(f"2_L1", f"Antal gissningar: {app.guess_counter}")
 
-                if len(self.word_list) > 1:
                     leader_return = ogf.leader_gui(self.word_list,
                                                    robot_guess=self.random_word,
                                                    clue=f"{app.getEntry('clue')}")
                     self.random_word = leader_return[0]
                     self.word_list = leader_return[1]
 
-                    app.setTextArea("1_L1", end=True, text=f"\n{app.guess_counter} - {self.random_word}")
-                else:
-                    app.okBox(title="", message="Programmet har slut på ord i sin lista.")
+                    if len(self.word_list) > 1:
+                        app.setTextArea("1_TA1", end=True, text=f"\n{app.guess_counter} - {self.random_word}")
+                    else:
+                        app.okBox(title="", message="Programmet har slut på ord i sin lista.")
+
+                elif app.getEntry('clue').lower() == "rätt":
+                    app.okBox(title="", message=f"Programmet gissade rätt ord. Ordet var {self.random_word}")
+                    app.clearAllTextAreas()
+            elif value == "Cancel":
+                exit()
+            elif value == "Restart":
+                exit()
+                lets_try_this_shhh()
 
         # Y GROUP 0
-        app.addEmptyLabel("0_EL0", column=y_group0, row=x_group0)
         app.addEmptyLabel("0_EL1", column=y_group0, row=x_group1)
         app.addEmptyLabel("0_EL2", column=y_group0, row=x_group2)
         app.addEmptyLabel("0_EL3", column=y_group0, row=x_group3)
+        app.addEmptyLabel("0_EL4", column=y_group0, row=x_group4)
 
         # Y GROUP 1 // WORD GUESS HERE AND USER INPUT HERE
-        app.addLabel("1_L0", text="Program Guess History:", column=y_group1, row=x_group0)
+        auto_entry_word_suggestions = ["0", "1", "2", "3", "4", "5", "rätt"]
+        button_names = ["Submit", "Cancel", "Restart"]
+        info_text = "Skriv antal rätt bokstäver, eller om ordet är rätt."
 
-        app.addScrolledTextArea("1_L1", column=y_group1, row=x_group1)
-        app.setTextArea("1_L1", text=f"{app.guess_counter} - {self.random_word}")
+        app.addLabel(title="1_L0", column=y_group1, row=x_group0, text=info_text)
+        app.addLabel("1_L1", text="Programmets Gissnings Historik:", column=y_group1, row=x_group1)
+        app.addScrolledTextArea("1_TA1", column=y_group1, row=x_group2)
+        app.addAutoEntry(title="clue", words=auto_entry_word_suggestions, column=y_group1, row=x_group3)
+        app.addButtons(names=button_names, funcs=press, column=y_group1, row=x_group4)
 
-        app.addEntry("clue", column=y_group1, row=x_group2)
-        app.addButton("SUBMIT", press, column=y_group1, row=x_group3)
+        # Settings
+        app.setTextArea("1_TA1", text=f"{app.guess_counter} - {self.random_word}")
 
         # Y GROUP 2
-        app.addLabel("2_L1", text="Guesses:", column=y_group2, row=x_group0)
-        app.addEmptyLabel("2_EL1", column=y_group2, row=x_group1)
+        app.addLabel("2_L1", text="Antal gissningar:", column=y_group2, row=x_group1)
         app.addEmptyLabel("2_EL2", column=y_group2, row=x_group2)
         app.addEmptyLabel("2_EL3", column=y_group2, row=x_group3)
         app.addEmptyLabel("2_EL4", column=y_group2, row=x_group4)
@@ -144,8 +158,8 @@ class OrdspelGUI:
 
 
 if __name__ == "__main__":
-    file_content = ofh.file_reader(read_file="words.txt", encoding='ISO-8859-1')  # returns list
-    generated_word = ogf.random_list_element(word_list=file_content)
+    # file_content = ofh.file_reader(read_file="words.txt", encoding='ISO-8859-1')  # returns list
+    # generated_word = ogf.random_list_element(word_list=file_content)
 
 
     def lets_try_this_shhh():

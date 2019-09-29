@@ -57,7 +57,11 @@ def leader_gui(words_list, robot_guess, clue):
     new_list = find_related_words(word_list=words_list, robot_guess=robot_guess,
                                   clue=int(clue))
 
-    r_word = random_list_element(new_list)
+    if len(new_list) > 0:
+        r_word = random_list_element(new_list)
+    else:
+        r_word = ""
+        new_list = []
 
     print(r_word)
 
