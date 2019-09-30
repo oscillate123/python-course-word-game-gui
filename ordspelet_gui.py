@@ -106,10 +106,10 @@ class OrdspelGUI:
         app.guess_counter = 1  # used in the 'press'-function
 
         # 3. TAB LOCAL FUNCTIONS
-        # 3.1 TODO PRESS FUNCTION
+        # 3.1 PRESS FUNCTION
         def press(value):
             if value == "Submit":
-                submit_data(data=f"{app.getEntry('clue')}")
+                send_data_to_backend(data=f"{app.getEntry('clue')}")
                 # if app.getEntry('clue').isdigit() and 0 <= int(app.getEntry('clue')) <= 5:
                 #     # USES Y GROUP 2
                 #     app.setLabel(f"2_L1", f"Antal gissningar: {app.guess_counter}")
@@ -147,7 +147,7 @@ class OrdspelGUI:
                 clean_up()  # the clean_up function restores balance to the universe.
                 app.guess_counter = 1  # TAB LOCAL VARIABLE resets to default value
 
-        def submit_data(data):
+        def send_data_to_backend(data):
             # DATA IS USER INPUT
             if data.isdigit() and 0 <= int(data) <= 5:
                 # USES Y GROUP 2
@@ -160,26 +160,23 @@ class OrdspelGUI:
                 self.random_word = parse_return[0]
                 self.word_list = parse_return[1]
 
-                # if the wordlist contains one item or above, we take the random word and print it
                 if len(self.word_list) > 0:
                     # USES Y GROUP 1
                     app.setTextArea("1_TA1", end=True, text=f"\n{app.guess_counter} - {self.random_word}")
+                    app.clearEntry(name="clue")
 
-                # otherwise we tell the User that the Program has run out of guesses (in its word list)
                 else:
-                    app.okBox(title="", message="Programmet har slut på ord i sin lista.")
+                    ok_box(title="", msg="Programmet har slut på ord i sin lista.")
                     clean_up()
 
-            # if the User tell the Program that the word guess was right, we will notify the user and clean up
             elif data.lower() == "rätt":
-                app.okBox(title="", message=f"Programmet gissade rätt ord. Ordet var {self.random_word}")
+                ok_box(title="", msg=f"Programmet gissade rätt ord. Ordet var {self.random_word}")
                 clean_up()  # the clean_up function restores balance to the universe.
                 app.guess_counter = 1  # TAB LOCAL VARIABLE resets to default value
 
-            # if the User provides incorrect input
             else:
-                app.warningBox(title="!", message='Skriv antal rätt bokstäver med en siffra,'
-                                                  ' eller "rätt" om ordet är rätt.')
+                err_msg = 'Skriv antal rätt bokstäver med en siffra, eller "rätt" om ordet är rätt.'
+                ok_box(title="Ogiltig indata", msg=err_msg)
                 app.clearAllEntries()
 
         # 4 TAB LOCAL GROUPS
@@ -190,7 +187,7 @@ class OrdspelGUI:
         app.addEmptyLabel("0_EL3", column=y_group0, row=x_group3)
         app.addEmptyLabel("0_EL4", column=y_group0, row=x_group4)
 
-        # TODO 4.1 Y GROUP 1 // WORD GUESS OUTPUT AND USER INPUT
+        # 4.1 Y GROUP 1 // WORD GUESS OUTPUT AND USER INPUT
         # 4.1 - VARIABLES
         # auto_entry_word_suggestions = ["0", "1", "2", "3", "4", "5", "rätt"]
         button_names = ["Submit", "Cancel", "Restart"]
@@ -221,7 +218,7 @@ class OrdspelGUI:
         app.addEmptyLabel("3_EL3", column=y_group3, row=x_group3)
         app.addEmptyLabel("3_EL4", column=y_group3, row=x_group4)
 
-        # 5 TODO TAB LOCAL STOP
+        # 5 TAB LOCAL STOP
         app.stopTab()
 
         # TODO -------------------------------- STOP TAB -------------------------------------
@@ -230,12 +227,14 @@ class OrdspelGUI:
         app.stopTabbedFrame()
 
         # METHOD FUNCTIONS:
-
         def clean_up():
             self.word_list = ofh.file_reader("words.txt", encoding="ISO-8859-1")  # restore to its default
             self.random_word = ogf.random_list_element(word_list=self.word_list)  # random from default word_list
             app.clearAllTextAreas()
             app.clearAllEntries()
+
+        def ok_box(title, msg):
+            app.okBox(title=f"{title}", message=f"{msg}")
 
         # RUNS GUI APPLICATION
         app.go()
@@ -251,5 +250,9 @@ if __name__ == "__main__":
         x = OrdspelGUI()
         x.go_gui()
 
-
-    lets_try_this_shhh()
+    try:
+        print("activated")
+        x = OrdspelGUI()
+        x.go_gui()
+    except ValueError:
+        gui.okBox(title="ValueError", message="", parent=x.go_gui())
