@@ -80,17 +80,49 @@ class OrdspelGUI:
 
         # 2. TAB 1 LOCAL VARIABLES
         # 2.1 GUESS COUNTER
-        app.guess_counter = 1  # used in the 'press'-function
+        app.guess_counter = 0  # used in the 'press'-function
 
         # 3. TAB 1 LOCAL FUNCTIONS
         # 3.1 PRESS FUNCTION
         def tab1_press(button_name):
             if button_name == " Skicka":
-                pass
+                usr_guess = app.getEntry('tab1_guess')
+                if check_correct_input(usr_guess):
+                    ran_wrd = self.random_word
+                    gui_middleman_backend_gamemode1(random_word=ran_wrd, user_guess=usr_guess)
+                    app.guess_counter += 1
+                else:
+                    incorrect_input_msg()
             elif button_name == " Avbryt":
                 exit()
             elif button_name == " Återställ":
                 clean_up()
+
+        def gui_middleman_backend_gamemode1(random_word, user_guess):
+            app.clearEntry(name='tab1_guess')
+            response = ogf.parase_compare_random_and_guess(word=random_word, guess=user_guess)
+
+            if response == "Rätt gissning!":
+                ok_box(title="", msg=response)
+                clean_up()
+            else:
+                app.setTextArea("tab1_1_TA1", text=f"\n{app.guess_counter} - {user_guess}\n")
+                app.setTextArea("tab1_1_TA1", text=f"{response}\n")
+                app.setLabel(f"tab1_2_L1", f"Antal gissningar: {app.guess_counter}")
+
+        def check_correct_input(user_guess):
+            if user_guess.isalpha():
+                if len(user_guess) == 5:
+                    return True
+                else:
+                    incorrect_input_msg()
+                    return False
+            else:
+                incorrect_input_msg()
+                return False
+
+        def incorrect_input_msg():
+            ok_box(title='Ogiltig indata', msg="Vänligen skriv ett ord med 5 unika bokstäver.")
 
         # 4 TAB 1 LOCAL GROUPS
         # 4.0 Y GROUP 0 // EMPTY SPACE
@@ -111,11 +143,8 @@ class OrdspelGUI:
         # 4.1 - GUI WIDGETS
         app.addLabel("tab1_1_L1", text="Användarens Gissnings Historik:", column=y_group1, row=x_group1)
         app.addScrolledTextArea("tab1_1_TA1", column=y_group1, row=x_group2)
-        app.addAutoEntry(title="tab1_clue", words=self.word_list, column=y_group1, row=x_group3)
+        app.addAutoEntry(title="tab1_guess", words=self.word_list, column=y_group1, row=x_group3)
         app.addButtons(names=tab1_button_names, funcs=tab1_press, column=y_group1, row=x_group4)
-
-        # 4.1 - SETTINGS
-        app.setTextArea("tab1_1_TA1", text=f"{app.guess_counter} - {self.random_word}")
 
         # 4.2 Y GROUP 2 // DISPLAY NUMBER OF GUESSES
         # 4.2 - GUI WIDGETS
@@ -164,7 +193,7 @@ class OrdspelGUI:
         # 3.1 PRESS FUNCTION
         def tab2_press(button_name):
             if button_name == "Skicka":
-                send_data_to_game_engine(data=app.getEntry('clue'))
+                gui_middleman_backend_gamemode2(data=app.getEntry('clue'))
             elif button_name == "Avbryt":
                 exit()
             elif button_name == "Återställ":
@@ -172,7 +201,7 @@ class OrdspelGUI:
                 clean_up()  # the clean_up function restores balance to the universe.
                 app.setLabel(f"2_L1", f"Antal gissningar: {app.guess_counter}")  # reset gui
 
-        def send_data_to_game_engine(data):
+        def gui_middleman_backend_gamemode2(data):
             # DATA IS USER INPUT
             if data.isdigit() and 0 <= int(data) <= 5:
                 # USES Y GROUP 2
@@ -196,8 +225,8 @@ class OrdspelGUI:
 
             elif data.lower() == "rätt":
                 ok_box(title="", msg=f"Programmet gissade rätt ord. Ordet var {self.random_word}")
-                clean_up()  # the clean_up function restores balance to the universe.
-                app.guess_counter = 1  # TAB LOCAL VARIABLE resets to default button_name
+                clean_up()
+                app.guess_counter = 1
 
             else:
                 err_msg = 'Skriv antal rätt bokstäver med en siffra, eller "rätt" om ordet är rätt.'
@@ -255,12 +284,13 @@ class OrdspelGUI:
 
         # VERSITILE LOCAL FUNCTIONS:
         def clean_up():
+            app.guess_counter = 1
             self.word_list = ofh.file_reader("words.txt", encoding="ISO-8859-1")  # restore to its default content
             self.random_word = ogf.random_list_element(word_list=self.word_list)  # random from restored word_list
             app.clearAllTextAreas()
             app.clearAllEntries()
-            app.setTextArea("tab1_1_TA1", text=f"\n{app.guess_counter} - {self.random_word}")
             app.setTextArea("1_TA1", text=f"\n{app.guess_counter} - {self.random_word}")
+            app.setLabel(name=f"tab1_2_L1", text=f"Antal gissningar: 0")
 
         def ok_box(title, msg):
             app.okBox(title=f"{title}", message=f"{msg}")

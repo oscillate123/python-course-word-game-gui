@@ -25,15 +25,16 @@ class ParseGuess:
         # Here we return the number of correct positions, and the number of correct letters
         return print_correct_pos, print_correct
 
-    def run_game(self):
+    def run_parse(self):
         # compares the user guess with the chosen word
 
         if self.guess == self.word:
-            print(f"Rätt gissning! Ordet var {self.word}")
-            return True
+            return "Rätt gissning!"
 
         else:
             print_correct_pos, print_correct_letter = ParseGuess.words_analyzer(self)
 
-            print(f"{print_correct_pos} är rätt och är på rätt plats, "
-                  f"och {print_correct_letter} är rätt men på fel plats.")
+            return_pos = f"{print_correct_pos} är rätt och är på rätt plats, "
+            return_letter = f"och {print_correct_letter} är rätt men på fel plats."
+
+            return return_pos + return_letter

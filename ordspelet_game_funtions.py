@@ -1,6 +1,5 @@
 import random
 import ordspelet_parse_user_guess as pug
-import ordspelet_input_functions as input_funcs
 
 
 def find_related_words(word_list, robot_guess, clue):
@@ -47,24 +46,7 @@ def parse_compare_words_and_hints(words_list, skynet_guess, clue):
     return [r_word, new_list]
 
 
-def player(words_list):
-    # game mode where user is guessing, and where program is giving clues
-    counter_2 = 0
-    flag = True
-    random_word = random_list_element(word_list=words_list)
-
-    while flag:
-        counter_2 += 1
-        user_guess = input_funcs.player_input(the_answer=random_word)
-        run = pug.ParseGuess(guess=user_guess, word=random_word)
-        run_done = run.run_game()
-
-        if run_done:
-            if counter_2 == 1:
-                print(f"Du gissade bara {counter_2} gång!")
-                flag = False
-            else:
-                print(f"Du gissade {counter_2} gånger.")
-                flag = False
-
-
+def parase_compare_random_and_guess(word, guess):
+    run = pug.ParseGuess(guess=guess, word=word)
+    response = run.run_parse()
+    return response
