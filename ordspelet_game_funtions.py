@@ -66,3 +66,5 @@ def player(words_list):
             else:
                 print(f"Du gissade {counter_2} gånger.")
                 flag = False
+
+
