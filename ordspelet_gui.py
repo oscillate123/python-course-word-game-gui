@@ -7,6 +7,16 @@ import ordspelet_game_funtions as ogf
 
 
 class OrdspelGUI:
+    # TABLE OF CONTENTS - CURRENT TAB
+    """
+    Current tab is for "Part 2" in the assignment. Where the User plays against the program.
+    The Program is trying to figure out which word the User is thinking of. The Programs
+    guesses are based on a random word from the self.word_list class attribute.
+
+    Lines through the code indicates tab code areas
+
+
+    """
 
     def __init__(self, word_list=None):
         # word_list=None, so we can use it if we have another words.txt file!
@@ -44,7 +54,7 @@ class OrdspelGUI:
         app.startTabbedFrame("TabbedFrame")
         app.setTabbedFrameTabExpand("TabbedFrame", expand=True)
 
-        # TODO -------------------------------- NEW TAB --------------------------------------
+        #  -------------------------------- NEW TAB --------------------------------------
 
         # TAB VARIABLES
 
@@ -78,9 +88,9 @@ class OrdspelGUI:
 
         app.stopTab()
 
-        # TODO -------------------------------- STOP TAB -------------------------------------
+        #  -------------------------------- STOP TAB -------------------------------------
 
-        # TODO -------------------------------- NEW TAB --------------------------------------
+        #  -------------------------------- NEW TAB --------------------------------------
 
         # TABLE OF CONTENTS - CURRENT TAB
         """
@@ -92,8 +102,8 @@ class OrdspelGUI:
         
         1. TAB LOCAL SETTINGS - Configures the settings of current tab
         2. TAB LOCAL VARIABLES - Local tab variables
-        3. TAB LOCAL FUNCTIONS - 
-        4. TAB LOCAL GROUPS
+        3. TAB LOCAL FUNCTIONS - Local tab functions, such as button presses & back end contact
+        4. TAB LOCAL GROUPS - 
         5. TAB LOCAL STOP
         """
 
@@ -107,47 +117,17 @@ class OrdspelGUI:
 
         # 3. TAB LOCAL FUNCTIONS
         # 3.1 PRESS FUNCTION
-        def press(value):
-            if value == "Submit":
-                send_data_to_backend(data=f"{app.getEntry('clue')}")
-                # if app.getEntry('clue').isdigit() and 0 <= int(app.getEntry('clue')) <= 5:
-                #     # USES Y GROUP 2
-                #     app.setLabel(f"2_L1", f"Antal gissningar: {app.guess_counter}")
-                #     app.guess_counter += 1
-                #
-                #     parse_return = ogf.parse_compare_words_and_hints(words_list=self.word_list,
-                #                                                      skynet_guess=self.random_word,
-                #                                                      clue=f"{app.getEntry('clue')}")
-                #     self.random_word = parse_return[0]
-                #     self.word_list = parse_return[1]
-                #
-                #     # if the wordlist contains one item or above, we take the random word and print it
-                #     if len(self.word_list) > 0:
-                #         # USES Y GROUP 1
-                #         app.setTextArea("1_TA1", end=True, text=f"\n{app.guess_counter} - {self.random_word}")
-                #
-                #     # otherwise we tell the User that the Program has run out of guesses (in its word list)
-                #     else:
-                #         app.okBox(title="", message="Programmet har slut på ord i sin lista.")
-                #         clean_up()
-                #
-                # # if the User tell the Program that the word guess was right, we will notify the user and clean up
-                # elif app.getEntry('clue').lower() == "rätt":
-                #     app.okBox(title="", message=f"Programmet gissade rätt ord. Ordet var {self.random_word}")
-                #     clean_up()  # the clean_up function restores balance to the universe.
-                #     app.guess_counter = 1  # TAB LOCAL VARIABLE resets to default value
-                #
-                # # if the User provides incorrect input
-                # else:
-                #     app.warningBox(title="!", message='Skriv antal rätt bokstäver med en siffra,'
-                #                                       ' eller "rätt" om ordet är rätt.')
-            elif value == "Cancel":
+        def press(button_name):
+            if button_name == "Skicka":
+                send_data_to_game_engine(data=app.getEntry('clue'))
+            elif button_name == "Avbryt":
                 exit()
-            elif value == "Restart":
+            elif button_name == "Starta om":
+                app.guess_counter = 1  # TAB LOCAL VARIABLE resets to default button_name
                 clean_up()  # the clean_up function restores balance to the universe.
-                app.guess_counter = 1  # TAB LOCAL VARIABLE resets to default value
+                app.setLabel(f"2_L1", f"Antal gissningar: {app.guess_counter}")  # reset gui
 
-        def send_data_to_backend(data):
+        def send_data_to_game_engine(data):
             # DATA IS USER INPUT
             if data.isdigit() and 0 <= int(data) <= 5:
                 # USES Y GROUP 2
@@ -172,7 +152,7 @@ class OrdspelGUI:
             elif data.lower() == "rätt":
                 ok_box(title="", msg=f"Programmet gissade rätt ord. Ordet var {self.random_word}")
                 clean_up()  # the clean_up function restores balance to the universe.
-                app.guess_counter = 1  # TAB LOCAL VARIABLE resets to default value
+                app.guess_counter = 1  # TAB LOCAL VARIABLE resets to default button_name
 
             else:
                 err_msg = 'Skriv antal rätt bokstäver med en siffra, eller "rätt" om ordet är rätt.'
@@ -190,7 +170,7 @@ class OrdspelGUI:
         # 4.1 Y GROUP 1 // WORD GUESS OUTPUT AND USER INPUT
         # 4.1 - VARIABLES
         # auto_entry_word_suggestions = ["0", "1", "2", "3", "4", "5", "rätt"]
-        button_names = ["Submit", "Cancel", "Restart"]
+        button_names = ["Skicka", "Avbryt", "Starta om"]
         info_text = "Skriv antal rätt bokstäver, eller om ordet är rätt."
 
         # 4.1 - GUI WIDGETS
@@ -221,17 +201,18 @@ class OrdspelGUI:
         # 5 TAB LOCAL STOP
         app.stopTab()
 
-        # TODO -------------------------------- STOP TAB -------------------------------------
+        #  -------------------------------- STOP TAB -------------------------------------
 
         # \\\\\ STOP TABBED FRAMES /////
         app.stopTabbedFrame()
 
-        # METHOD FUNCTIONS:
+        # VERSITILE LOCAL FUNCTIONS:
         def clean_up():
-            self.word_list = ofh.file_reader("words.txt", encoding="ISO-8859-1")  # restore to its default
-            self.random_word = ogf.random_list_element(word_list=self.word_list)  # random from default word_list
+            self.word_list = ofh.file_reader("words.txt", encoding="ISO-8859-1")  # restore to its default content
+            self.random_word = ogf.random_list_element(word_list=self.word_list)  # random from restored word_list
             app.clearAllTextAreas()
             app.clearAllEntries()
+            app.setTextArea("1_TA1", text=f"\n{app.guess_counter} - {self.random_word}")
 
         def ok_box(title, msg):
             app.okBox(title=f"{title}", message=f"{msg}")
@@ -244,15 +225,6 @@ if __name__ == "__main__":
     # file_content = ofh.file_reader(read_file="words.txt", encoding='ISO-8859-1')  # returns list
     # generated_word = ogf.random_list_element(word_list=file_content)
 
-
-    def lets_try_this_shhh():
-        print("activated")
-        x = OrdspelGUI()
-        x.go_gui()
-
-    try:
-        print("activated")
-        x = OrdspelGUI()
-        x.go_gui()
-    except ValueError:
-        gui.okBox(title="ValueError", message="", parent=x.go_gui())
+    print("activated")
+    x = OrdspelGUI()
+    x.go_gui()
