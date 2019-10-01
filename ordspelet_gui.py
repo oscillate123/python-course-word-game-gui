@@ -203,10 +203,16 @@ class OrdspelGUI:
 
         def gui_middleman_backend_gamemode2(data):
             # DATA IS USER INPUT
-            if data.isdigit() and 0 <= int(data) <= 5:
+
+            if data.lower() == "rätt":
+                ok_box(title="", msg=f"Programmet gissade rätt ord. Ordet var {self.random_word}")
+                clean_up()
+                app.guess_counter = 1
+
+            elif len(data) == 2 and any(char.isdigit() for char in data if 0 <= int(char) <= 5):
                 # USES Y GROUP 2
-                app.setLabel(f"2_L1", f"Antal gissningar: {app.guess_counter}")
                 app.guess_counter += 1
+                app.setLabel(f"2_L1", f"Antal gissningar: {app.guess_counter}")
 
                 parse_return = ogf.parse_compare_words_and_hints(words_list=self.word_list,
                                                                  skynet_guess=self.random_word,
@@ -217,16 +223,12 @@ class OrdspelGUI:
                 if len(self.word_list) > 0:
                     # USES Y GROUP 1
                     app.setTextArea("1_TA1", end=True, text=f"\n{app.guess_counter} - {self.random_word}")
+                    # app.setLabel(name=f"tab1_2_L1", text=f"Antal gissningar: {app.guess_counter}")
                     app.clearEntry(name="clue")
 
                 else:
                     ok_box(title="", msg="Programmet har slut på ord i sin lista.")
                     clean_up()
-
-            elif data.lower() == "rätt":
-                ok_box(title="", msg=f"Programmet gissade rätt ord. Ordet var {self.random_word}")
-                clean_up()
-                app.guess_counter = 1
 
             else:
                 err_msg = 'Skriv antal rätt bokstäver med en siffra, eller "rätt" om ordet är rätt.'
@@ -287,10 +289,10 @@ class OrdspelGUI:
             app.guess_counter = 1
             self.word_list = ofh.file_reader("words.txt", encoding="ISO-8859-1")  # restore to its default content
             self.random_word = ogf.random_list_element(word_list=self.word_list)  # random from restored word_list
-            app.clearAllTextAreas()
-            app.clearAllEntries()
             app.setTextArea("1_TA1", text=f"\n{app.guess_counter} - {self.random_word}")
             app.setLabel(name=f"tab1_2_L1", text=f"Antal gissningar: 0")
+            app.clearAllTextAreas()
+            app.clearAllEntries()
 
         def ok_box(title, msg):
             app.okBox(title=f"{title}", message=f"{msg}")

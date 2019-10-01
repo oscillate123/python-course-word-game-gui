@@ -4,14 +4,37 @@ import ordspelet_parse_user_guess as pug
 
 def find_related_words(word_list, robot_guess, clue):
     results = []
+    clue_r = clue  # correct letter, but not a positional letter
 
     for word in word_list:
-        counter = 0
+        counter_r = 0
         for letter in word:
             if letter in robot_guess:
-                counter += 1
+                counter_r += 1
 
-        if counter >= clue:
+        if counter_r >= clue_r:
+            results.append(word)
+
+    return results
+
+
+def find_related_words_v2(word_list, robot_guess, clue):
+    results = []
+    clue_p = clue[0]  # correct position
+    clue_r = clue[1]  # correct letter, but not correct position
+
+    for word in word_list:
+        counter_p = 0  # correct position
+        counter_r = 0  # correct letter, but not correct position
+        for letter in word:
+            if letter == robot_guess[word.index(letter)]:
+                counter_p += 1
+            elif letter in robot_guess:
+                counter_r += 1
+            else:
+                pass
+
+        if counter_r >= int(clue_r) and counter_p == int(clue_p):
             results.append(word)
 
     return results
@@ -34,8 +57,8 @@ def parse_compare_words_and_hints(words_list, skynet_guess, clue):
     word_list = words_list
     word_list.remove(skynet_guess)
 
-    new_list = find_related_words(word_list=words_list, robot_guess=skynet_guess,
-                                  clue=int(clue))
+    new_list = find_related_words_v2(word_list=words_list, robot_guess=skynet_guess,
+                                     clue=clue)
 
     if len(new_list) > 0:
         r_word = random_list_element(new_list)
