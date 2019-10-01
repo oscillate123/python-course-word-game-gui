@@ -2,22 +2,6 @@ import random
 import ordspelet_parse_user_guess as pug
 
 
-def find_related_words(word_list, robot_guess, clue):
-    results = []
-    clue_r = clue  # correct letter, but not a positional letter
-
-    for word in word_list:
-        counter_r = 0
-        for letter in word:
-            if letter in robot_guess:
-                counter_r += 1
-
-        if counter_r >= clue_r:
-            results.append(word)
-
-    return results
-
-
 def find_related_words_v2(word_list, robot_guess, clue):
     # source: find_related_words_source.jpg
     # The picture originates from a discussion with my teacher,
