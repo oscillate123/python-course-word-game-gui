@@ -19,6 +19,10 @@ def find_related_words(word_list, robot_guess, clue):
 
 
 def find_related_words_v2(word_list, robot_guess, clue):
+    # source: find_related_words_source.jpg
+    # The picture originates from a discussion with my teacher,
+    # regarding how to improve/optimize my function. Therefor v2
+
     results = []
     clue_p = clue[0]  # correct position
     clue_r = clue[1]  # correct letter, but not correct position
