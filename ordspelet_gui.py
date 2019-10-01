@@ -7,13 +7,9 @@ import ordspelet_game_funtions as ogf
 
 
 class OrdspelGUI:
-    # TABLE OF CONTENTS - CURRENT TAB
+    # TABLE OF CONTENTS
     """
-    Current tab is for "Part 2" in the assignment. Where the User plays against the program.
-    The Program is trying to figure out which word the User is thinking of. The Programs
-    guesses are based on a random word from the self.word_list class attribute.
 
-    Lines through the code indicates tab code areas
 
 
     """
@@ -59,7 +55,7 @@ class OrdspelGUI:
         app.startTabbedFrame("TabbedFrame")
         app.setTabbedFrameTabExpand("TabbedFrame", expand=True)
 
-        #  ----------------------------------- TAB 1 ---------------------------------------
+        #  ------------------------------- START TAB 1 -------------------------------------
 
         # TABLE OF CONTENTS - TAB 1
         """
@@ -166,7 +162,7 @@ class OrdspelGUI:
 
         #  -------------------------------- STOP TAB 1 -------------------------------------
 
-        #  ----------------------------------- TAB 2 ---------------------------------------
+        #  ------------------------------- START TAB 2 -------------------------------------
 
         # TABLE OF CONTENTS - TAB 2
         """
