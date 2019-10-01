@@ -9,9 +9,19 @@ import ordspelet_game_funtions as ogf
 class OrdspelGUI:
     # TABLE OF CONTENTS
     """
+    The program is a word game application. In User vs. Skynet, the Skynet has chosen a word,
+    and the user is going to try to find out which word it is. In Skynet vs. User, the user
+    thinks of a word, and the Skynet is going to try to find out which word it is. The Skynet's
+    word dictionary is from a text file, called "words.txt" in the repository.
 
 
 
+    1. INIT
+    2. GUI METHOD - This runs the whole show
+        2.1 TAB 1 - Has its own Table of Contents
+        2.2 TAB 2 - Has its own Table of Contents
+        2.3 Method functions, used for saving space in the GUI code
+        2.4 Starts the GUI
     """
 
     def __init__(self, word_list=None):
@@ -227,7 +237,11 @@ class OrdspelGUI:
                     clean_up()
 
             else:
-                err_msg = 'Skriv antal rätt bokstäver med en siffra, eller "rätt" om ordet är rätt.'
+                err_msg = 'Skriv antalet bokstäver som är på rätt plats ' \
+                          'följt av en siffra som indikerar hur många bokstäver som är rätt ' \
+                          'men på fel plats. T.ex. "13" - betyder att en bokstav är på rätt plats,' \
+                          ' och tre bokstäver är rätt men på fel plats.' \
+                          ' Om ordet är rätt, så skriv rätt.'
                 ok_box(title="Ogiltig indata", msg=err_msg)
                 app.clearAllEntries()
 
@@ -285,10 +299,10 @@ class OrdspelGUI:
             app.guess_counter = 1
             self.word_list = ofh.file_reader("words.txt", encoding="ISO-8859-1")  # restore to its default content
             self.random_word = ogf.random_list_element(word_list=self.word_list)  # random from restored word_list
-            app.setTextArea("1_TA1", text=f"\n{app.guess_counter} - {self.random_word}")
-            app.setLabel(name=f"tab1_2_L1", text=f"Antal gissningar: 0")
             app.clearAllTextAreas()
             app.clearAllEntries()
+            app.setTextArea("1_TA1", text=f"\n{app.guess_counter} - {self.random_word}")
+            app.setLabel(name=f"tab1_2_L1", text=f"Antal gissningar: 0")
 
         def ok_box(title, msg):
             app.okBox(title=f"{title}", message=f"{msg}")
