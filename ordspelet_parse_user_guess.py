@@ -7,7 +7,7 @@ class StringChecker:
         self.guess = guess
         self.word = word
 
-    def analyze_similariies(self):
+    def analyze_similarities(self):
         # here we analyze/parse the two class attributes guess and word
         # source: https://qph.fs.quoracdn.net/main-qimg-dbe0252936d6b28a6644faa17953f9ef
 
@@ -32,7 +32,7 @@ class StringChecker:
             return "Rätt gissning!"
 
         else:
-            print_correct_pos, print_correct_letter = StringChecker.analyze_similariies(self)
+            print_correct_pos, print_correct_letter = StringChecker.analyze_similarities(self)
 
             return_pos = f"{print_correct_pos} är rätt och är på rätt plats, "
             return_letter = f"och {print_correct_letter} är rätt men på fel plats."

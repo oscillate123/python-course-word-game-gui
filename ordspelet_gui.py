@@ -54,7 +54,6 @@ class OrdspelGUI:
         x_group2 = 2
         x_group3 = 3
         x_group4 = 4
-        x_group5 = 5
 
         # TERMS AND CONDITIONS OF USING APPLICATION
         terms_n_cond_msg = "Det går inte att spela båda spelen samtidigt. Om du vill byta spelläge," \
@@ -130,7 +129,7 @@ class OrdspelGUI:
         def incorrect_input_msg():
             ok_box(title='Ogiltig indata', msg="Vänligen skriv ett ord med 5 unika bokstäver.")
 
-        # 4 TAB 1 LOCAL GROUPS
+        # 4. TAB 1 LOCAL GROUPS
         # 4.0 Y GROUP 0 // EMPTY SPACE
         # 4.0 - VARIABLES
         info_text = "Här ska du gissa vilket ord programmet har valt."
@@ -216,22 +215,20 @@ class OrdspelGUI:
                 clean_up()
 
             elif len(user_input) == 2 and any(char.isdigit() for char in user_input if 0 <= int(char) <= 5):
-                middleman_backend_gamemode2(data=user_input)
+                get_new_random_and_list(data=user_input)
 
             else:
                 tab2_error_box()
                 app.clearAllEntries()
 
-        def middleman_backend_gamemode2(data):
+        def get_new_random_and_list(data):
             # USES Y GROUP 2
             app.guess_counter += 1
             app.setLabel(f"2_L1", f"Antal gissningar: {app.guess_counter}")
 
-            parse_return = functions.new_random_and_list(words_list=self.word_list,
-                                                         skynet_guess=self.random_word,
-                                                         clue=data)
-            self.random_word = parse_return[0]
-            self.word_list = parse_return[1]
+            self.random_word, self.word_list = functions.new_random_and_list(words_list=self.word_list,
+                                                                             skynet_guess=self.random_word,
+                                                                             clue=data)
 
             control_if_list_empty(check_list=self.word_list)
 
@@ -319,12 +316,3 @@ class OrdspelGUI:
 
         # RUNS GUI APPLICATION
         app.go()
-
-
-if __name__ == "__main__":
-    # file_content = handler.file_reader(read_file="words.txt", encoding='ISO-8859-1')  # returns list
-    # generated_word = functions.random_list_element(word_list=file_content)
-
-    print("activated")
-    x = OrdspelGUI()
-    x.gui_application()
