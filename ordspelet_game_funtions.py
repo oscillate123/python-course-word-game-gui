@@ -1,11 +1,11 @@
 import random
-import ordspelet_parse_user_guess as pug
+import ordspelet_parse_user_guess as parse
 
 
-def find_related_words_v2(word_list, robot_guess, clue):
+def filter_word_list(word_list, robot_guess, clue):
     # source: find_related_words_source.jpg
     # The picture originates from a discussion with my teacher,
-    # regarding how to improve/optimize my function. Therefor v2
+    # regarding how to improve/optimize my function.
 
     results = []
     clue_p = clue[0]  # correct position
@@ -28,7 +28,7 @@ def find_related_words_v2(word_list, robot_guess, clue):
     return results
 
 
-def random_list_element(word_list):
+def random_from_list(word_list):
     # generates a random word from the parameter word_list
     # source: https://docs.python.org/3/library/random.html
     # random.sample generates a list. Therefor we can point
@@ -39,17 +39,17 @@ def random_list_element(word_list):
     return the_random_word
 
 
-def parse_compare_words_and_hints(words_list, skynet_guess, clue):
+def new_random_and_list(words_list, skynet_guess, clue):
     # game mode where program is guessing, and where user is giving clues
 
     word_list = words_list
     word_list.remove(skynet_guess)
 
-    new_list = find_related_words_v2(word_list=words_list, robot_guess=skynet_guess,
-                                     clue=clue)
+    new_list = filter_word_list(word_list=words_list, robot_guess=skynet_guess,
+                                clue=clue)
 
     if len(new_list) > 0:
-        r_word = random_list_element(new_list)
+        r_word = random_from_list(new_list)
     else:
         r_word = ""
         new_list = []
@@ -57,7 +57,7 @@ def parse_compare_words_and_hints(words_list, skynet_guess, clue):
     return [r_word, new_list]
 
 
-def parase_compare_random_and_guess(word, guess):
-    run = pug.ParseGuess(guess=guess, word=word)
-    response = run.run_parse()
+def compare_random_with_guess(word, guess):
+    parse_run = parse.StringChecker(guess=guess, word=word)
+    response = parse_run.check_if_correct()
     return response

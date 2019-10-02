@@ -2,12 +2,12 @@
 # We return True if the guess is the same as the random generated word.
 
 
-class ParseGuess:
+class StringChecker:
     def __init__(self, guess, word):
         self.guess = guess
         self.word = word
 
-    def words_analyzer(self):
+    def analyze_similariies(self):
         # here we analyze/parse the two class attributes guess and word
         # source: https://qph.fs.quoracdn.net/main-qimg-dbe0252936d6b28a6644faa17953f9ef
 
@@ -25,14 +25,14 @@ class ParseGuess:
         # Here we return the number of correct positions, and the number of correct letters
         return print_correct_pos, print_correct
 
-    def run_parse(self):
+    def check_if_correct(self):
         # compares the user guess with the chosen word
 
         if self.guess == self.word:
             return "Rätt gissning!"
 
         else:
-            print_correct_pos, print_correct_letter = ParseGuess.words_analyzer(self)
+            print_correct_pos, print_correct_letter = StringChecker.analyze_similariies(self)
 
             return_pos = f"{print_correct_pos} är rätt och är på rätt plats, "
             return_letter = f"och {print_correct_letter} är rätt men på fel plats."
