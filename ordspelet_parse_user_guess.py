@@ -1,7 +1,3 @@
-# In this class, we compare the user guess with the random generated word.
-# We return True if the guess is the same as the random generated word.
-
-
 class StringChecker:
     def __init__(self, guess, word):
         self.guess = guess
