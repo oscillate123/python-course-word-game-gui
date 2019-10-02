@@ -216,35 +216,10 @@ class OrdspelGUI:
                 clean_up()
 
             elif len(user_input) == 2 and any(char.isdigit() for char in user_input if 0 <= int(char) <= 5):
-                # # USES Y GROUP 2
-                # app.guess_counter += 1
-                # app.setLabel(f"2_L1", f"Antal gissningar: {app.guess_counter}")
-                #
-                # parse_return = functions.parse_compare_words_and_hints(words_list=self.word_list,
-                #                                                        skynet_guess=self.random_word,
-                #                                                        clue=user_input)
-                # self.random_word = parse_return[0]
-                # self.word_list = parse_return[1]
-                #
-                # if len(self.word_list) > 0:
-                #     # USES Y GROUP 1
-                #     app.setTextArea("1_TA1", end=True, text=f"\n{app.guess_counter} - {self.random_word}")
-                #     # app.setLabel(name=f"tab1_2_L1", text=f"Antal gissningar: {app.guess_counter}")
-                #     app.clearEntry(name="clue")
-                #
-                # else:
-                #     ok_box(title="", msg="Programmet har slut på ord i sin lista.")
-                #     clean_up()
-
                 middleman_backend_gamemode2(data=user_input)
 
             else:
-                err_msg = 'Skriv antalet bokstäver som är på rätt plats ' \
-                          'följt av en siffra som indikerar hur många bokstäver som är rätt ' \
-                          'men på fel plats. T.ex. "13" - betyder att en bokstav är på rätt plats,' \
-                          ' och tre bokstäver är rätt men på fel plats.' \
-                          ' Om ordet är rätt, så skriv rätt.'
-                ok_box(title="Ogiltig indata", msg=err_msg)
+                tab2_error_box()
                 app.clearAllEntries()
 
         def middleman_backend_gamemode2(data):
@@ -258,7 +233,10 @@ class OrdspelGUI:
             self.random_word = parse_return[0]
             self.word_list = parse_return[1]
 
-            if len(self.word_list) > 0:
+            control_if_list_empty(check_list=self.word_list)
+
+        def control_if_list_empty(check_list):
+            if len(check_list) > 0:
                 # USES Y GROUP 1
                 app.setTextArea("1_TA1", end=True, text=f"\n{app.guess_counter} - {self.random_word}")
                 # app.setLabel(name=f"tab1_2_L1", text=f"Antal gissningar: {app.guess_counter}")
@@ -330,6 +308,14 @@ class OrdspelGUI:
 
         def ok_box(title, msg):
             app.okBox(title=f"{title}", message=f"{msg}")
+
+        def tab2_error_box():
+            err_msg = 'Skriv antalet bokstäver som är på rätt plats ' \
+                      'följt av en siffra som indikerar hur många bokstäver som är rätt ' \
+                      'men på fel plats. T.ex. "13" - betyder att en bokstav är på rätt plats,' \
+                      ' och tre bokstäver är rätt men på fel plats.' \
+                      ' Om ordet är rätt, så skriv rätt.'
+            ok_box(title="Ogiltig indata", msg=err_msg)
 
         # RUNS GUI APPLICATION
         app.go()
