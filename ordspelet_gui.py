@@ -246,7 +246,7 @@ class OrdspelGUI:
         # 4 TAB LOCAL GROUPS
         # 4.0 Y GROUP 0 // EMPTY SPACE
         # 4.0 - VARIABLES
-        info_text = "Tänk på ett ord. Skriv antal rätt bokstäver, eller om ordet är rätt."
+        info_text = "Tänk på ett ord. Ange två siffror för ledtrådar, skriv rätt om det är rätt"
 
         # 4.0 - GUI WIDGETS
         app.addLabel(title="0_L0", column=y_group0, row=x_group0, colspan=3, text=info_text)
@@ -258,7 +258,6 @@ class OrdspelGUI:
         # 4.1 Y GROUP 1 // WORD GUESS OUTPUT AND USER INPUT
         # 4.1 - VARIABLES
         button_names = ["Skicka", "Avbryt", "Återställ"]
-        info_text = "Tänk på ett ord. Skriv antal rätt bokstäver, eller om ordet är rätt."
 
         # 4.1 - GUI WIDGETS
         app.addLabel("1_L1", text="Programmets Gissnings Historik:", column=y_group1, row=x_group1)
